@@ -25,7 +25,8 @@ RUN virtualenv ./venv
 RUN source venv/bin/activate \
 && pip install --no-cache-dir --upgrade pip \
 && pip install --no-cache-dir -r requirements.txt \
-&& python3 manage.py collectstatic
+&& python3 manage.py collectstatic \ 
+&& python3 manage.py migrate
 
 #Grant permissions for logs
 RUN chmod 750 /var/log/apache2
@@ -34,12 +35,12 @@ RUN chmod 750 /var/log/apache2
 RUN chmod 770 /var/www/html
 
 #Grant permissions to www-data for writing and reading to sqlite3
-RUN chmod 770 /var/www/html/db.sqlite3
+#RUN chmod 770 /var/www/html/db.sqlite3
 RUN chown :www-data /var/www/html/
 
 #Modify group for folders and files
 RUN chown :www-data /var/www/html/space_missions
-RUN chown :www-data /var/www/html/db.sqlite3
+#RUN chown :www-data /var/www/html/db.sqlite3
 RUN sudo chown root:www-data /var/log/apache2
 
 #Add ALLOWED_HOST to settings in Django project to allow request from apache server
